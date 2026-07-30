@@ -30,6 +30,7 @@ export const altText: Record<string, string> = {
   'uk-and-elsewhere-20': 'A wet park path at dusk under bare trees, the sky still pale blue and orange.',
   'uk-and-elsewhere-21': 'A single bare tree in a park against a soft overcast sky.',
   'uk-and-elsewhere-22': 'A red dragon sculpture backlit by the sun, the light flaring around its wing.',
+  'uk-and-elsewhere-23': 'A lone figure standing on a rocky ridge at dusk, ranges of mountains fading back into warm haze behind them.',
 
   // Hong Kong
   'hong-kong-01': 'A bare brown hillside ridge under a flat peach coloured sky.',
@@ -54,6 +55,7 @@ export const altText: Record<string, string> = {
   'hong-kong-20': 'Two tiny figures on rocks looking out over a vast pale cream sea, almost lost in the haze.',
   'hong-kong-21': 'The sun setting behind a headland out at sea.',
   'hong-kong-22': 'A cable stayed bridge in monochrome, hills and flat water beneath it.',
+  'hong-kong-23': 'Kites and birds hanging in thick fog, the frame inverted so a dark canopy of leaves sits across the top.',
 
   // Figures
   'figures-01': 'A figure with a backpack walking through heavy fog, everything around them bleached out.',
@@ -104,6 +106,7 @@ export const altText: Record<string, string> = {
   'animals-24': 'A goat leaning over a metal gate, one horn curving back, in black and white.',
   'animals-25': 'A bird perched on a rock in silhouette against a flat pink dusk sky.',
   'animals-26': 'A cat in profile against a plain background, in soft black and white.',
+  'animals-27': "A squirrel's tail curling down the side of a tree trunk, the animal itself out of frame.",
 };
 
 export const SITE_ALT = {

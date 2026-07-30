@@ -5,10 +5,13 @@
  *        -> src/photos/<slug>/<slug>-NN.jpg  (2560px long edge)
  *        -> src/data/photos.json             (dimensions + sampled light)
  *
- * Filenames are renumbered in sorted order so they are stable and readable,
- * which is what src/data/alt-text.ts keys against.
+ * Ids are pinned to the source file, never to its sort position. Once a
+ * photograph has an id it keeps it forever, and anything new is appended at the
+ * end of its album. This matters because src/data/alt-text.ts keys off these
+ * ids: if adding one photograph could renumber the rest, every alt string after
+ * it would silently describe the wrong picture. That is worse than a crash.
  *
- * Run once locally: npm run photos
+ * Run locally after changing originals/: npm run photos
  * The output is committed, so Cloudflare never touches originals/.
  */
 import sharp from 'sharp';
@@ -57,21 +60,48 @@ async function sampleLight(buffer) {
   return hex(sum.map((v) => v / slice.length));
 }
 
+const dataPath = path.join(ROOT, 'src', 'data', 'photos.json');
+
+/** Existing source hash -> id, so previously assigned ids survive a rerun. */
+const assigned = new Map();
+try {
+  for (const p of JSON.parse(await fs.readFile(dataPath, 'utf-8'))) {
+    if (p.source) assigned.set(p.source, p.id);
+  }
+} catch {
+  // First run, nothing to preserve.
+}
+
 const manifest = [];
 let processed = 0;
+let added = 0;
 
 for (const album of ALBUMS) {
   const srcDir = path.join(ROOT, 'originals', album.folder);
   const outDir = path.join(ROOT, 'src', 'photos', album.slug);
   await fs.mkdir(outDir, { recursive: true });
 
-  // Sorted so numbering is reproducible across machines and reruns.
   const files = (await fs.readdir(srcDir)).filter((f) => f.endsWith('.jpg')).sort();
+
+  // Next free number in this album, so new photographs append rather than
+  // displacing anything that already has an id.
+  let next = 0;
+  for (const id of assigned.values()) {
+    const m = id.match(new RegExp(`^${album.slug}-(\\d+)$`));
+    if (m) next = Math.max(next, Number(m[1]));
+  }
 
   console.log(`\n${album.slug} (${files.length})`);
 
-  for (const [i, file] of files.entries()) {
-    const id = `${album.slug}-${String(i + 1).padStart(2, '0')}`;
+  for (const file of files) {
+    const source = file.replace('.jpg', '');
+    let id = assigned.get(source);
+    const isNew = !id;
+    if (isNew) {
+      id = `${album.slug}-${String(++next).padStart(2, '0')}`;
+      assigned.set(source, id);
+      added++;
+    }
     const input = await fs.readFile(path.join(srcDir, file));
 
     const output = await sharp(input)
@@ -86,6 +116,7 @@ for (const album of ALBUMS) {
       id,
       album: album.slug,
       file: `${id}.jpg`,
+      source,
       width: output.info.width,
       height: output.info.height,
       light: await sampleLight(input),
@@ -93,15 +124,15 @@ for (const album of ALBUMS) {
 
     processed++;
     const kb = (output.data.length / 1024).toFixed(0);
-    console.log(`  ${id}  ${output.info.width}x${output.info.height}  ${kb}KB`);
+    console.log(
+      `  ${id}  ${output.info.width}x${output.info.height}  ${kb}KB${isNew ? '   <- NEW, needs alt text' : ''}`
+    );
   }
 }
 
-const dataDir = path.join(ROOT, 'src', 'data');
-await fs.mkdir(dataDir, { recursive: true });
-await fs.writeFile(
-  path.join(dataDir, 'photos.json'),
-  JSON.stringify(manifest, null, 2) + '\n'
-);
+manifest.sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true }));
 
-console.log(`\nDone. ${processed} photos -> src/photos/, manifest -> src/data/photos.json`);
+await fs.mkdir(path.dirname(dataPath), { recursive: true });
+await fs.writeFile(dataPath, JSON.stringify(manifest, null, 2) + '\n');
+
+console.log(`\nDone. ${processed} photos, ${added} newly added.`);
