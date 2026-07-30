@@ -51,7 +51,7 @@ const pass = (label, ok, detail) => {
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   for (const path of ['/', '/portfolio', '/portfolio/hong-kong', '/about', '/contact']) {
-    await page.goto(BASE + path, { waitUntil: 'networkidle' });
+    await page.goto(BASE + path, { waitUntil: 'load' });
     const samples = await page.evaluate(() => {
       const out = [];
       const walk = document.createElement('div');
@@ -130,7 +130,7 @@ const pass = (label, ok, detail) => {
 // ---- 3. lightbox keyboard: open, arrow, escape, focus restored
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  await page.goto(BASE + '/portfolio/animals', { waitUntil: 'networkidle' });
+  await page.goto(BASE + '/portfolio/animals', { waitUntil: 'load' });
   const first = page.locator('[data-photo]').first();
   await first.focus();
   await page.keyboard.press('Enter');
@@ -179,7 +179,7 @@ const pass = (label, ok, detail) => {
     reducedMotion: 'reduce',
   });
   const page = await ctx.newPage();
-  await page.goto(BASE + '/portfolio/hong-kong', { waitUntil: 'networkidle' });
+  await page.goto(BASE + '/portfolio/hong-kong', { waitUntil: 'load' });
   const durations = await page.evaluate(() => {
     const vals = [];
     document.querySelectorAll('body *').forEach((el) => {
@@ -196,7 +196,7 @@ const pass = (label, ok, detail) => {
 // ---- 5. every image has explicit dimensions, so CLS stays at zero
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  await page.goto(BASE + '/portfolio/figures', { waitUntil: 'networkidle' });
+  await page.goto(BASE + '/portfolio/figures', { waitUntil: 'load' });
   const missing = await page.evaluate(
     () =>
       [...document.querySelectorAll('img')].filter((i) => !i.getAttribute('width') || !i.getAttribute('height'))
