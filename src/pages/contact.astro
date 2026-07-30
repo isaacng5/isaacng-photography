@@ -8,13 +8,7 @@ import { SITE } from '../data/albums';
   description="Get in touch with Isaac Ng about a photograph, a print, or a walk with cameras."
 >
   <section class="contact page">
-    <header>
-      <h1 class="title">Contact</h1>
-      <p class="contact__lede">
-        Instagram is the quickest way to reach me. Prints, questions about a particular
-        photograph, or somewhere worth walking with a camera, all welcome.
-      </p>
-    </header>
+    <h1 class="title">Contact</h1>
 
     <a class="contact__card" href={SITE.instagramUrl} rel="me noopener" target="_blank">
       <span class="label contact__where">Instagram</span>
@@ -33,18 +27,12 @@ import { SITE } from '../data/albums';
       max-width: 54rem;
     }
 
-    .contact__lede {
-      max-width: 44ch;
-      margin-top: var(--space-6);
-      color: var(--muted);
-    }
-
     .contact__card {
       display: grid;
       grid-template-columns: 1fr auto;
       align-items: center;
       gap: var(--space-2) var(--space-6);
-      margin-top: var(--space-16);
+      margin-top: var(--space-12);
       padding-block: var(--space-8);
       border-top: 1px solid var(--edge);
       border-bottom: 1px solid var(--edge);

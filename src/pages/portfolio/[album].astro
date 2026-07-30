@@ -30,11 +30,10 @@ const next = albums[(index + 1) % albums.length];
       </svg>
       Portfolio
     </a>
-    <h1 class="title head__title">{album.title}</h1>
-    <div class="head__meta">
-      <p class="label">{items.length} photographs</p>
-      <p class="head__note">{album.note}</p>
-    </div>
+    <h1 class="title head__title" style={`view-transition-name: album-${album.slug}`}>
+      {album.title}
+    </h1>
+    <p class="label head__count">{items.length} photographs</p>
   </header>
 
   <div class="page">
@@ -73,19 +72,10 @@ const next = albums[(index + 1) % albums.length];
       color: var(--ink);
     }
 
-    .head__meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: var(--space-3) var(--space-8);
+    .head__count {
       margin-top: var(--space-4);
       padding-top: var(--space-4);
       border-top: 1px solid var(--edge);
-    }
-
-    .head__note {
-      max-width: 46ch;
-      color: var(--muted);
     }
 
     .next {

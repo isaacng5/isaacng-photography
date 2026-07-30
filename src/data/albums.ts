@@ -9,6 +9,10 @@
  * Covers are all landscape and all within a hair of 3:2, so the index bands
  * come out the same height without the frame having to crop anything.
  */
+/**
+ * No descriptions. The photographs are the content; a title and a count are
+ * all the signposting a visitor needs to choose where to go.
+ */
 export interface Album {
   slug: string;
   title: string;
@@ -16,8 +20,6 @@ export interface Album {
   ground: string;
   /** Photo id used as the index cover. */
   cover: string;
-  /** One line, shown under the title on the index. */
-  note: string;
 }
 
 export const albums: Album[] = [
@@ -26,28 +28,24 @@ export const albums: Album[] = [
     title: 'UK & Elsewhere',
     ground: '#16110C',
     cover: 'uk-and-elsewhere-17',
-    note: 'Winter light in London, Cardiff and the coast. Mostly shot into the sun.',
   },
   {
     slug: 'hong-kong',
     title: 'Hong Kong',
     ground: '#10151A',
     cover: 'hong-kong-03',
-    note: 'Home, in the humid haze that never quite lifts off the harbour.',
   },
   {
     slug: 'figures',
     title: 'Figures',
     ground: '#131013',
     cover: 'figures-01',
-    note: 'People as shapes in light. Almost nobody here is facing the camera.',
   },
   {
     slug: 'animals',
     title: 'Animals',
     ground: '#17120F',
     cover: 'animals-07',
-    note: 'Birds on railings, cats indoors, whatever held still long enough.',
   },
 ];
 
@@ -55,6 +53,23 @@ export const albumBySlug = new Map(albums.map((a) => [a.slug, a]));
 
 /** Home page hero: silhouetted figures walking into low winter sun. */
 export const HERO_ID = 'uk-and-elsewhere-17';
+
+/**
+ * What the home page scrolls into. Nine frames across all four sets, no
+ * heading and no captions, chosen because each one is a dark shape against
+ * light, which is what nearly every photograph here is doing.
+ */
+export const SELECTED = [
+  'animals-07',
+  'hong-kong-12',
+  'figures-05',
+  'uk-and-elsewhere-01',
+  'hong-kong-11',
+  'figures-17',
+  'uk-and-elsewhere-12',
+  'hong-kong-15',
+  'animals-03',
+] as const;
 
 export const SITE = {
   name: 'Isaac Ng',

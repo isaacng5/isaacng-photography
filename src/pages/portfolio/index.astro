@@ -17,12 +17,7 @@ const rows = albums.map((album) => ({
   flush
 >
   <header class="intro page">
-    <h1 class="title">Four sets</h1>
-    <p class="intro__note">
-      Roughly ninety photographs, taken when the light was worth stopping for. Each set is
-      graded to its own black point, so the page you are standing in is coloured by the
-      photographs hanging in it.
-    </p>
+    <h1 class="title">Portfolio</h1>
   </header>
 
   {
@@ -34,7 +29,7 @@ const rows = albums.map((album) => ({
           data-flip={i % 2 === 1}
           data-light={album.image.light}
         >
-          <div class="band__frame">
+          <div class="band__frame reveal">
             <Image
               src={album.image.src}
               alt={album.image.alt}
@@ -45,21 +40,11 @@ const rows = albums.map((album) => ({
               class="band__img"
             />
           </div>
-          <div class="band__text">
-            <h2 class="title band__title">{album.title}</h2>
+          <div class="band__text reveal" data-reveal-index="1">
+            <h2 class="title band__title" style={`view-transition-name: album-${album.slug}`}>
+              {album.title}
+            </h2>
             <p class="label band__count">{album.count} photographs</p>
-            <p class="band__note">{album.note}</p>
-            <span class="label band__go">
-              Open the set
-              <svg width="22" height="8" viewBox="0 0 22 8" aria-hidden="true">
-                <path
-                  d="M0 4h20M17 1l3 3-3 3"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.2"
-                />
-              </svg>
-            </span>
           </div>
         </a>
       </section>
@@ -70,13 +55,7 @@ const rows = albums.map((album) => ({
 <style>
   @layer components {
     .intro {
-      padding-block: clamp(var(--space-12), 10vh, var(--space-24)) var(--space-16);
-    }
-
-    .intro__note {
-      max-width: 48ch;
-      margin-top: var(--space-4);
-      color: var(--muted);
+      padding-block: clamp(var(--space-12), 10vh, var(--space-24)) var(--space-12);
     }
 
     /* Each band carries its album's own measured black point, so scrolling the
@@ -122,29 +101,7 @@ const rows = albums.map((album) => ({
     }
 
     .band__count {
-      margin-top: var(--space-2);
-    }
-
-    .band__note {
-      max-width: 34ch;
-      margin-top: var(--space-6);
-      color: var(--muted);
-    }
-
-    .band__go {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-3);
-      margin-top: var(--space-8);
-      color: var(--ink);
-    }
-
-    .band__go svg {
-      transition: transform var(--duration-ui) var(--ease);
-    }
-
-    .band__inner:hover .band__go svg {
-      transform: translateX(4px);
+      margin-top: var(--space-3);
     }
 
     @media (max-width: 52rem) {
@@ -156,8 +113,7 @@ const rows = albums.map((album) => ({
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .band__img,
-      .band__go svg {
+      .band__img {
         transition: none;
       }
       .band__inner:hover .band__img {

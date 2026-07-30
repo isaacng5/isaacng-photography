@@ -143,6 +143,47 @@
   }
 }
 
+@layer layout {
+  /**
+   * Scroll reveal. Photographs rise a little and fade as they come into view,
+   * once, then stay put. The transform is small on purpose: enough to feel the
+   * page breathing, not enough to make you wait for content you can already see.
+   */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 700ms var(--ease),
+      transform 700ms var(--ease);
+  }
+
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Without JS nothing is ever hidden. */
+  .no-js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 @layer utilities {
   .visually-hidden {
     position: absolute;

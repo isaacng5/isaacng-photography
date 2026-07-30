@@ -224,11 +224,41 @@ const { photos, albumTitle } = Astro.props;
       if (announce) announce.textContent = `Photograph ${current + 1} of ${slides.length}`;
     };
 
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    /**
+     * Grow the full size frame out of the thumbnail that was clicked, so the
+     * photograph you picked is visibly the one that opens. Measure both boxes,
+     * start the big one transformed onto the small one, then release it.
+     */
+    const growFrom = (thumb: HTMLElement) => {
+      if (reduced.matches) return;
+      const target = slides[current]?.querySelector<HTMLElement>('.lb__img');
+      if (!target) return;
+
+      const from = thumb.getBoundingClientRect();
+      const to = target.getBoundingClientRect();
+      if (!to.width || !to.height) return;
+
+      const dx = from.left + from.width / 2 - (to.left + to.width / 2);
+      const dy = from.top + from.height / 2 - (to.top + to.height / 2);
+      const scale = from.width / to.width;
+
+      target.animate(
+        [
+          { transform: `translate(${dx}px, ${dy}px) scale(${scale})`, opacity: 0.4 },
+          { transform: 'none', opacity: 1 },
+        ],
+        { duration: 420, easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }
+      );
+    };
+
     const open = (index: number, from: HTMLElement) => {
       opener = from;
       show(index);
       dialog.showModal();
       document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => growFrom(from));
     };
 
     const close = () => {

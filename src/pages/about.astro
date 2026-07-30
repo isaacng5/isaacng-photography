@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import { SITE } from '../data/albums';
 import { siteImages } from '../data/photos';
 import { SITE_ALT } from '../data/alt-text';
 ---
@@ -13,7 +12,6 @@ import { SITE_ALT } from '../data/alt-text';
   <article class="about page">
     <header class="about__head">
       <h1 class="title">About</h1>
-      <p class="label about__kicker">Hong Kong, then London. {SITE.camera}.</p>
     </header>
 
     <figure class="about__figure">
@@ -55,12 +53,6 @@ import { SITE_ALT } from '../data/alt-text';
       </p>
     </div>
 
-    <a class="about__go label" href="/portfolio">
-      See the photographs
-      <svg width="22" height="8" viewBox="0 0 22 8" aria-hidden="true">
-        <path d="M0 4h20M17 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.2"></path>
-      </svg>
-    </a>
   </article>
 </Base>
 
@@ -73,10 +65,6 @@ import { SITE_ALT } from '../data/alt-text';
     .about__head {
       padding-bottom: var(--space-8);
       border-bottom: 1px solid var(--edge);
-    }
-
-    .about__kicker {
-      margin-top: var(--space-3);
     }
 
     .about__figure {
@@ -92,23 +80,6 @@ import { SITE_ALT } from '../data/alt-text';
     .about__prose {
       margin-top: var(--space-12);
       color: color-mix(in srgb, var(--ink) 88%, transparent);
-    }
-
-    .about__go {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-3);
-      margin-top: var(--space-16);
-      color: var(--ink);
-      transition: color var(--duration-ui) var(--ease);
-    }
-
-    .about__go svg {
-      transition: transform var(--duration-ui) var(--ease);
-    }
-
-    .about__go:hover svg {
-      transform: translateX(4px);
     }
 
     @media (min-width: 64rem) {
@@ -129,8 +100,7 @@ import { SITE_ALT } from '../data/alt-text';
         top: 7rem;
       }
 
-      .about__prose,
-      .about__go {
+      .about__prose {
         grid-column: 2;
       }
 

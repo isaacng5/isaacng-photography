@@ -1,0 +1,85 @@
+---
+/**
+ * All the page level motion, in one place.
+ *
+ *   1. Scroll reveal for anything marked .reveal
+ *   2. Parallax on the home hero
+ *
+ * Both are driven by rAF or IntersectionObserver rather than raw scroll
+ * handlers, both re run after a view transition swap, and both stand down
+ * entirely under prefers-reduced-motion.
+ */
+---
+
+<script>
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function setupReveal() {
+    const items = [...document.querySelectorAll<HTMLElement>('.reveal:not(.is-in)')];
+    if (!items.length) return;
+
+    if (reduced.matches || !('IntersectionObserver' in window)) {
+      items.forEach((el) => el.classList.add('is-in'));
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          // Stagger across the row so a row of photographs arrives as a wave
+          // rather than all at once.
+          const delay = Number(el.dataset.revealIndex ?? 0) % 3;
+          el.style.transitionDelay = `${delay * 90}ms`;
+          el.classList.add('is-in');
+          io.unobserve(el);
+        });
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+    );
+
+    items.forEach((el) => io.observe(el));
+  }
+
+  function setupParallax() {
+    const img = document.querySelector<HTMLElement>('[data-parallax]');
+    if (!img) return;
+    if (reduced.matches) {
+      img.style.transform = '';
+      return;
+    }
+
+    const hero = img.closest<HTMLElement>('.hero');
+    if (!hero) return;
+
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const height = hero.offsetHeight || 1;
+      const progress = Math.min(1, Math.max(0, window.scrollY / height));
+      // The photograph drifts up at roughly a fifth of scroll speed, so the
+      // frame opens as you leave it. Scale covers the gap the drift creates.
+      img.style.transform = `translate3d(0, ${(progress * height * 0.2).toFixed(1)}px, 0) scale(1.12)`;
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+
+  function start() {
+    setupReveal();
+    setupParallax();
+  }
+
+  start();
+  // View transitions swap the document without a reload, so wire it up again.
+  document.addEventListener('astro:page-load', start);
+</script>

@@ -1,16 +1,18 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import { SITE, HERO_ID } from '../data/albums';
+import PhotoGrid from '../components/PhotoGrid.astro';
+import Lightbox from '../components/Lightbox.astro';
+import { SITE, HERO_ID, SELECTED } from '../data/albums';
 import { photo } from '../data/photos';
 
 const hero = photo(HERO_ID);
+const selected = SELECTED.map((id) => photo(id));
 ---
 
 <Base
   title={SITE.name}
-  description="Photographs by Isaac Ng. Winter light in London, humid haze in Hong Kong, and people who are almost never facing the camera."
-  flush
+  description="Photographs by Isaac Ng, from Hong Kong, living in London."
 >
   <section class="hero" style={`--light: ${hero.light}`}>
     <Image
@@ -22,19 +24,32 @@ const hero = photo(HERO_ID);
       fetchpriority="high"
       decoding="sync"
       class="hero__img"
+      data-parallax
     />
     <div class="hero__veil"></div>
     <div class="hero__text page">
       <h1 class="display hero__name">{SITE.name}</h1>
       <p class="label hero__role">{SITE.role}</p>
     </div>
-    <a class="hero__cue label" href="/portfolio">
-      <span>See the work</span>
-      <svg width="10" height="26" viewBox="0 0 10 26" aria-hidden="true">
+    <span class="hero__cue" aria-hidden="true">
+      <svg width="10" height="26" viewBox="0 0 10 26">
         <path d="M5 0v22M1 18l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.2"></path>
+      </svg>
+    </span>
+  </section>
+
+  {/* No heading, no captions. The photographs introduce themselves. */}
+  <section class="selected page" aria-label="Selected photographs">
+    <PhotoGrid photos={selected} />
+    <a class="label selected__all" href="/portfolio">
+      All four sets
+      <svg width="22" height="8" viewBox="0 0 22 8" aria-hidden="true">
+        <path d="M0 4h20M17 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.2"></path>
       </svg>
     </a>
   </section>
+
+  <Lightbox photos={selected} albumTitle="Selected" />
 </Base>
 
 <style>
@@ -45,10 +60,14 @@ const hero = photo(HERO_ID);
       min-height: calc(100svh - var(--nav-h));
       display: grid;
       isolation: isolate;
+      /* The photograph is scaled past its box to give the parallax room to
+         drift, so the box has to clip it. */
+      overflow: hidden;
     }
 
     /* Absolute, so the photograph's own 3:2 ratio cannot stretch the row past
-       the fold. The box decides the height, the image conforms to it. */
+       the fold. The box decides the height, the image conforms to it.
+       Pre scaled so the parallax drift never exposes an edge. */
     .hero__img {
       position: absolute;
       inset: 0;
@@ -56,7 +75,39 @@ const hero = photo(HERO_ID);
       height: 100%;
       object-fit: cover;
       object-position: center 55%;
+      transform: scale(1.12);
+      transform-origin: center 40%;
+      will-change: transform;
       z-index: -2;
+    }
+
+    /* The wordmark settles once on arrival. */
+    .hero__text > * {
+      animation: rise 900ms var(--ease) both;
+    }
+
+    .hero__role {
+      animation-delay: 140ms;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero__img {
+        transform: none;
+      }
+      .hero__text > * {
+        animation: none;
+      }
     }
 
     /* The wordmark sits in the dark lower third of this frame. The veil only
@@ -94,21 +145,40 @@ const hero = photo(HERO_ID);
       grid-area: 1 / 1;
       align-self: end;
       justify-self: end;
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
       margin-inline-end: var(--gutter);
       padding-bottom: clamp(var(--space-12), 12vh, var(--space-24));
       color: var(--muted);
-      transition: color var(--duration-ui) var(--ease);
-    }
-
-    .hero__cue:hover {
-      color: var(--ink);
     }
 
     .hero__cue svg {
       animation: drift 3.4s var(--ease) infinite;
+    }
+
+    .selected {
+      padding-top: clamp(var(--space-12), 10vh, var(--space-24));
+    }
+
+    .selected__all {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-top: var(--space-12);
+      padding-top: var(--space-8);
+      color: var(--muted);
+      border-top: 1px solid var(--edge);
+      transition: color var(--duration-ui) var(--ease);
+    }
+
+    .selected__all:hover {
+      color: var(--ink);
+    }
+
+    .selected__all svg {
+      transition: transform var(--duration-ui) var(--ease);
+    }
+
+    .selected__all:hover svg {
+      transform: translateX(4px);
     }
 
     @keyframes drift {
@@ -130,10 +200,5 @@ const hero = photo(HERO_ID);
       }
     }
 
-    @media (max-width: 40rem) {
-      .hero__cue span {
-        display: none;
-      }
-    }
   }
 </style>

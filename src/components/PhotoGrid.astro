@@ -20,7 +20,7 @@ const { photos } = Astro.props;
 <ul class="grid" data-grid>
   {
     photos.map((p, i) => (
-      <li class="grid__cell" style={`--r: ${p.ratio.toFixed(4)}`}>
+      <li class="grid__cell reveal" style={`--r: ${p.ratio.toFixed(4)}`} data-reveal-index={i}>
         <button
           type="button"
           class="grid__btn"

@@ -41,6 +41,20 @@ Each album carries its own black point, measured from the shadow tones of the ph
 
 **Layout.** Justified rows where each item's flex basis and flex grow are both proportional to its aspect ratio, so widths within a row stay proportional to ratio and every height in that row comes out equal. Nothing is ever cropped.
 
+**Words.** Titles, counts and navigation. That is all. No album descriptions, no photo captions, no atmospheric blurb. The photographs are the content and they do not need introducing. Alt text carries a real description for screen readers, and is deliberately not repeated on screen.
+
+## Motion
+
+| Where | What |
+| --- | --- |
+| Home hero | Photograph drifts at a fifth of scroll speed. Pre scaled 1.12 and clipped so the drift never exposes an edge |
+| Home wordmark | Rises once on arrival, role label 140ms behind it |
+| Grids | Photographs fade and rise as they enter view, staggered across each row, once only |
+| Between pages | View transitions cross fade, and an album title morphs from the index into its own page |
+| Lightbox | The full size frame grows out of the thumbnail you clicked |
+
+Everything is driven by IntersectionObserver or rAF rather than raw scroll handlers, re runs after a view transition swap, and collapses to nothing under `prefers-reduced-motion`, which is tested.
+
 ## Photographs
 
 Source files live in `originals/` (283MB, git ignored). `npm run photos` normalises them to 2560px long edge into `src/photos/` (61MB, committed), samples each photograph's light, and writes `src/data/photos.json`.
