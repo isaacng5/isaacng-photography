@@ -1,0 +1,139 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { SITE, HERO_ID } from '../data/albums';
+import { photo } from '../data/photos';
+
+const hero = photo(HERO_ID);
+---
+
+<Base
+  title={SITE.name}
+  description="Photographs by Isaac Ng. Winter light in London, humid haze in Hong Kong, and people who are almost never facing the camera."
+  flush
+>
+  <section class="hero" style={`--light: ${hero.light}`}>
+    <Image
+      src={hero.src}
+      alt={hero.alt}
+      widths={[640, 1280, 1920, 2560]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync"
+      class="hero__img"
+    />
+    <div class="hero__veil"></div>
+    <div class="hero__text page">
+      <h1 class="display hero__name">{SITE.name}</h1>
+      <p class="label hero__role">{SITE.role}</p>
+    </div>
+    <a class="hero__cue label" href="/portfolio">
+      <span>See the work</span>
+      <svg width="10" height="26" viewBox="0 0 10 26" aria-hidden="true">
+        <path d="M5 0v22M1 18l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.2"></path>
+      </svg>
+    </a>
+  </section>
+</Base>
+
+<style>
+  @layer components {
+    .hero {
+      position: relative;
+      /* Fill what is left under the sticky nav without ever overflowing. */
+      min-height: calc(100svh - var(--nav-h));
+      display: grid;
+      isolation: isolate;
+    }
+
+    /* Absolute, so the photograph's own 3:2 ratio cannot stretch the row past
+       the fold. The box decides the height, the image conforms to it. */
+    .hero__img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 55%;
+      z-index: -2;
+    }
+
+    /* The wordmark sits in the dark lower third of this frame. The veil only
+       deepens what is already dark there, it does not wash the photograph. */
+    .hero__veil {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        to top,
+        color-mix(in srgb, var(--ground) 94%, transparent) 0%,
+        color-mix(in srgb, var(--ground) 74%, transparent) 18%,
+        color-mix(in srgb, var(--ground) 38%, transparent) 38%,
+        transparent 66%
+      );
+    }
+
+    .hero__text {
+      grid-area: 1 / 1;
+      align-self: end;
+      padding-bottom: clamp(var(--space-12), 12vh, var(--space-24));
+    }
+
+    .hero__name {
+      color: var(--ink);
+    }
+
+    .hero__role {
+      margin-top: var(--space-3);
+      color: color-mix(in srgb, var(--ink) 72%, transparent);
+      letter-spacing: 0.42em;
+    }
+
+    .hero__cue {
+      grid-area: 1 / 1;
+      align-self: end;
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-inline-end: var(--gutter);
+      padding-bottom: clamp(var(--space-12), 12vh, var(--space-24));
+      color: var(--muted);
+      transition: color var(--duration-ui) var(--ease);
+    }
+
+    .hero__cue:hover {
+      color: var(--ink);
+    }
+
+    .hero__cue svg {
+      animation: drift 3.4s var(--ease) infinite;
+    }
+
+    @keyframes drift {
+      0%,
+      70%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.65;
+      }
+      35% {
+        transform: translateY(4px);
+        opacity: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero__cue svg {
+        animation: none;
+      }
+    }
+
+    @media (max-width: 40rem) {
+      .hero__cue span {
+        display: none;
+      }
+    }
+  }
+</style>

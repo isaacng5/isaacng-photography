@@ -1,0 +1,102 @@
+---
+import { SITE } from '../data/albums';
+
+const path = Astro.url.pathname;
+const links = [
+  { href: '/portfolio', label: 'Portfolio' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
+---
+
+<header class="nav">
+  <div class="nav__inner page">
+    <a class="nav__mark" href="/">{SITE.name}</a>
+    <nav aria-label="Main">
+      <ul class="nav__list">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="nav__link"
+                aria-current={isCurrent(link.href) ? 'page' : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  @layer components {
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: color-mix(in srgb, var(--album-ground) 82%, transparent);
+      backdrop-filter: blur(14px);
+      transition: background-color var(--duration-ambient) var(--ease);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-8);
+      padding-block: var(--space-6);
+    }
+
+    .nav__mark {
+      font-size: var(--step-label);
+      font-weight: 500;
+      font-stretch: 112%;
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      white-space: nowrap;
+      /* Full ink. The wordmark is the one place the brightest tone is earned. */
+      color: var(--ink);
+    }
+
+    .nav__list {
+      display: flex;
+      gap: clamp(var(--space-6), 4vw, var(--space-12));
+      margin: 0;
+    }
+
+    .nav__link {
+      font-size: var(--step-label);
+      font-weight: 400;
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color var(--duration-ui) var(--ease);
+    }
+
+    .nav__link:hover,
+    .nav__link[aria-current='page'] {
+      color: var(--ink);
+    }
+
+    /* The current page carries a single sodium hairline. This is the only
+       fixed accent anywhere on the site. */
+    .nav__link[aria-current='page'] {
+      box-shadow: 0 1px 0 var(--sodium);
+    }
+
+    @media (max-width: 26rem) {
+      .nav__inner {
+        gap: var(--space-4);
+      }
+
+      .nav__list {
+        gap: var(--space-4);
+      }
+    }
+  }
+</style>

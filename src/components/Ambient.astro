@@ -1,0 +1,85 @@
+---
+/**
+ * The signature.
+ *
+ * Isaac's whole body of work is about being lit by a low sun. So the page is
+ * lit by whichever photograph you are looking at: each one carries the average
+ * colour of its own brightest eighth, sampled at build time, and a very slow
+ * warmth rises behind the frame under the pointer in that photograph's colour.
+ *
+ * It is deliberately below the threshold of "an effect". Nothing flashes, and
+ * there is no fixed brand accent anywhere on the site.
+ */
+---
+
+<div class="ambient" data-ambient aria-hidden="true"></div>
+
+<style>
+  @layer components {
+    .ambient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(
+        38rem 38rem at var(--ambient-x, 50%) var(--ambient-y, 50%),
+        color-mix(in srgb, var(--light) 20%, transparent),
+        transparent 68%
+      );
+      transition:
+        opacity var(--duration-ambient) var(--ease),
+        background var(--duration-ambient) var(--ease);
+    }
+
+    .ambient[data-on] {
+      opacity: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ambient {
+        transition: none;
+      }
+    }
+
+    /* A hover driven atmosphere means nothing on a touch screen, and the
+       repaint cost is real on low powered devices. */
+    @media (hover: none) {
+      .ambient {
+        display: none;
+      }
+    }
+  }
+</style>
+
+<script>
+  const layer = document.querySelector<HTMLElement>('[data-ambient]');
+  const canHover = window.matchMedia('(hover: hover)').matches;
+
+  if (layer && canHover) {
+    let idle: number | undefined;
+
+    const lightUp = (el: HTMLElement, light: string) => {
+      const box = el.getBoundingClientRect();
+      layer.style.setProperty('--light', light);
+      layer.style.setProperty('--ambient-x', `${box.left + box.width / 2}px`);
+      layer.style.setProperty('--ambient-y', `${box.top + box.height / 2}px`);
+      layer.setAttribute('data-on', '');
+      window.clearTimeout(idle);
+    };
+
+    const dim = () => {
+      idle = window.setTimeout(() => layer.removeAttribute('data-on'), 120);
+    };
+
+    // Grid cells and album bands both advertise a sampled light.
+    document.querySelectorAll<HTMLElement>('[data-light]').forEach((el) => {
+      const light = el.dataset.light;
+      if (!light) return;
+      el.addEventListener('pointerenter', () => lightUp(el, light));
+      el.addEventListener('focus', () => lightUp(el, light));
+      el.addEventListener('pointerleave', dim);
+      el.addEventListener('blur', dim);
+    });
+  }
+</script>

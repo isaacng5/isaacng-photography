@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import { albums } from '../data/albums';
+---
+
+<Base title="Page not found" description="That page does not exist.">
+  <section class="lost page">
+    <h1 class="title">That page does not exist</h1>
+    <p class="lost__note">The link may be old, or the address may have a typo in it.</p>
+
+    <nav aria-label="Sets">
+      <ul class="lost__list">
+        {
+          albums.map((album) => (
+            <li>
+              <a class="lost__link" href={`/portfolio/${album.slug}`}>
+                {album.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </section>
+</Base>
+
+<style>
+  @layer components {
+    .lost {
+      padding-block: clamp(var(--space-16), 16vh, var(--space-32));
+      max-width: 44rem;
+    }
+
+    .lost__note {
+      margin-top: var(--space-4);
+      color: var(--muted);
+    }
+
+    .lost__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3) var(--space-8);
+      margin-top: var(--space-12);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--edge);
+    }
+
+    .lost__link {
+      color: var(--muted);
+      transition: color var(--duration-ui) var(--ease);
+    }
+
+    .lost__link:hover {
+      color: var(--ink);
+    }
+  }
+</style>

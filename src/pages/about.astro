@@ -1,0 +1,142 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/albums';
+import { siteImages } from '../data/photos';
+import { SITE_ALT } from '../data/alt-text';
+---
+
+<Base
+  title="About"
+  description="Isaac Ng is an amateur photographer from Hong Kong, living in London, shooting a Nikon Z6ii when the light is worth stopping for."
+>
+  <article class="about page">
+    <header class="about__head">
+      <h1 class="title">About</h1>
+      <p class="label about__kicker">Hong Kong, then London. {SITE.camera}.</p>
+    </header>
+
+    <figure class="about__figure">
+      <Image
+        src={siteImages.isaac}
+        alt={SITE_ALT.isaac}
+        widths={[480, 960, 1440]}
+        sizes="(max-width: 60rem) 92vw, 40rem"
+        loading="eager"
+        decoding="async"
+        class="about__img"
+      />
+    </figure>
+
+    {/* Newsreader appears here and nowhere else on the site. */}
+    <div class="prose about__prose">
+      <p>
+        Isaac Ng, an amateur photographer from Hong Kong, has found his passion for capturing
+        life's moments in the bustling city of London. During his spare time, he delves into
+        the world of photography, using his Nikon Z6ii as his creative tool of choice.
+      </p>
+      <p>
+        With an open minded approach to photography, Isaac embraces a wide range of subjects,
+        from expressive portraits to mesmerising landscapes and the enchanting world of
+        animals. His lens becomes a window into the diverse and multifaceted aspects of life,
+        seeking out the hidden beauties that often go unnoticed.
+      </p>
+      <p>
+        Rather than viewing photography as a full time pursuit, Isaac values it as a cherished
+        outlet for creative expression and personal enjoyment. He takes pictures solely when
+        inspiration strikes, allowing each shot to unfold organically and authentically, free
+        from the constraints of forced obligations.
+      </p>
+      <p>
+        Isaac's keen eye for detail and sensitivity to colours lend a distinctive aura to his
+        photographs, inviting viewers to experience the world through his unique perspective.
+        Join him on this artistic odyssey as he uncovers the beauty within the mundane and
+        embraces the ever changing nature of his photographic exploration.
+      </p>
+    </div>
+
+    <a class="about__go label" href="/portfolio">
+      See the photographs
+      <svg width="22" height="8" viewBox="0 0 22 8" aria-hidden="true">
+        <path d="M0 4h20M17 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.2"></path>
+      </svg>
+    </a>
+  </article>
+</Base>
+
+<style>
+  @layer components {
+    .about {
+      padding-block: clamp(var(--space-12), 10vh, var(--space-24)) 0;
+    }
+
+    .about__head {
+      padding-bottom: var(--space-8);
+      border-bottom: 1px solid var(--edge);
+    }
+
+    .about__kicker {
+      margin-top: var(--space-3);
+    }
+
+    .about__figure {
+      margin: var(--space-12) 0 0;
+      max-width: 40rem;
+    }
+
+    .about__img {
+      width: 100%;
+      height: auto;
+    }
+
+    .about__prose {
+      margin-top: var(--space-12);
+      color: color-mix(in srgb, var(--ink) 88%, transparent);
+    }
+
+    .about__go {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-top: var(--space-16);
+      color: var(--ink);
+      transition: color var(--duration-ui) var(--ease);
+    }
+
+    .about__go svg {
+      transition: transform var(--duration-ui) var(--ease);
+    }
+
+    .about__go:hover svg {
+      transform: translateX(4px);
+    }
+
+    @media (min-width: 64rem) {
+      .about {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        column-gap: clamp(var(--space-12), 6vw, var(--space-24));
+        align-items: start;
+      }
+
+      .about__head {
+        grid-column: 1 / -1;
+      }
+
+      .about__figure {
+        margin-top: var(--space-16);
+        position: sticky;
+        top: 7rem;
+      }
+
+      .about__prose,
+      .about__go {
+        grid-column: 2;
+      }
+
+      .about__prose {
+        margin-top: var(--space-16);
+      }
+    }
+  }
+</style>

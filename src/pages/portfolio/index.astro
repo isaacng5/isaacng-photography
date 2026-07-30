@@ -1,0 +1,168 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { albums } from '../../data/albums';
+import { photo, photosIn } from '../../data/photos';
+
+const rows = albums.map((album) => ({
+  ...album,
+  count: photosIn(album.slug).length,
+  image: photo(album.cover),
+}));
+---
+
+<Base
+  title="Portfolio"
+  description="Four sets of photographs: winter light around the UK, humid haze in Hong Kong, figures, and animals."
+  flush
+>
+  <header class="intro page">
+    <h1 class="title">Four sets</h1>
+    <p class="intro__note">
+      Roughly ninety photographs, taken when the light was worth stopping for. Each set is
+      graded to its own black point, so the page you are standing in is coloured by the
+      photographs hanging in it.
+    </p>
+  </header>
+
+  {
+    rows.map((album, i) => (
+      <section class="band" style={`--band-ground: ${album.ground}; --light: ${album.image.light}`}>
+        <a
+          class="band__inner page"
+          href={`/portfolio/${album.slug}`}
+          data-flip={i % 2 === 1}
+          data-light={album.image.light}
+        >
+          <div class="band__frame">
+            <Image
+              src={album.image.src}
+              alt={album.image.alt}
+              widths={[480, 960, 1440]}
+              sizes="(max-width: 52rem) 92vw, 44vw"
+              loading={i < 2 ? 'eager' : 'lazy'}
+              decoding="async"
+              class="band__img"
+            />
+          </div>
+          <div class="band__text">
+            <h2 class="title band__title">{album.title}</h2>
+            <p class="label band__count">{album.count} photographs</p>
+            <p class="band__note">{album.note}</p>
+            <span class="label band__go">
+              Open the set
+              <svg width="22" height="8" viewBox="0 0 22 8" aria-hidden="true">
+                <path
+                  d="M0 4h20M17 1l3 3-3 3"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                />
+              </svg>
+            </span>
+          </div>
+        </a>
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  @layer components {
+    .intro {
+      padding-block: clamp(var(--space-12), 10vh, var(--space-24)) var(--space-16);
+    }
+
+    .intro__note {
+      max-width: 48ch;
+      margin-top: var(--space-4);
+      color: var(--muted);
+    }
+
+    /* Each band carries its album's own measured black point, so scrolling the
+       index walks you through four different light conditions. */
+    .band {
+      background: var(--band-ground);
+      transition: background-color var(--duration-ambient) var(--ease);
+    }
+
+    .band__inner {
+      display: grid;
+      gap: clamp(var(--space-6), 5vw, var(--space-16));
+      align-items: center;
+      padding-block: clamp(var(--space-12), 9vw, var(--space-24));
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    }
+
+    .band__inner[data-flip='true'] .band__frame {
+      order: 2;
+    }
+
+    /* Fixed ratio so all four bands come out the same height. Every cover is
+       within a hair of 3:2 already, so nothing meaningful is cropped. */
+    .band__frame {
+      overflow: hidden;
+      aspect-ratio: 3 / 2;
+      background: color-mix(in srgb, var(--ink) 4%, transparent);
+    }
+
+    .band__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 900ms var(--ease);
+    }
+
+    .band__inner:hover .band__img {
+      transform: scale(1.018);
+    }
+
+    .band__title {
+      color: var(--ink);
+    }
+
+    .band__count {
+      margin-top: var(--space-2);
+    }
+
+    .band__note {
+      max-width: 34ch;
+      margin-top: var(--space-6);
+      color: var(--muted);
+    }
+
+    .band__go {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-top: var(--space-8);
+      color: var(--ink);
+    }
+
+    .band__go svg {
+      transition: transform var(--duration-ui) var(--ease);
+    }
+
+    .band__inner:hover .band__go svg {
+      transform: translateX(4px);
+    }
+
+    @media (max-width: 52rem) {
+      .band__inner,
+      .band__inner[data-flip='true'] .band__frame {
+        grid-template-columns: minmax(0, 1fr);
+        order: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .band__img,
+      .band__go svg {
+        transition: none;
+      }
+      .band__inner:hover .band__img {
+        transform: none;
+      }
+    }
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import type { Photo } from '../data/photos';
+
+interface Props {
+  photos: Photo[];
+}
+const { photos } = Astro.props;
+---
+
+{/*
+  Justified rows without cropping.
+
+  Each item's flex-basis and flex-grow are both proportional to its aspect
+  ratio, so within any row every width stays proportional to its ratio, which
+  means every height in that row comes out equal. No object-fit, no crop, the
+  composition survives. The trailing spacers stop the final row from stretching
+  a lone photograph across the whole page.
+*/}
+<ul class="grid" data-grid>
+  {
+    photos.map((p, i) => (
+      <li class="grid__cell" style={`--r: ${p.ratio.toFixed(4)}`}>
+        <button
+          type="button"
+          class="grid__btn"
+          data-photo={p.id}
+          data-light={p.light}
+          data-index={i}
+          aria-label={`Open photograph ${i + 1} of ${photos.length}: ${p.alt}`}
+        >
+          <Image
+            src={p.src}
+            alt={p.alt}
+            widths={[320, 640, 960, 1280]}
+            sizes="(max-width: 46rem) 92vw, (max-width: 80rem) 46vw, 32vw"
+            loading={i < 4 ? 'eager' : 'lazy'}
+            decoding="async"
+            class="grid__img"
+          />
+        </button>
+      </li>
+    ))
+  }
+  <li class="grid__spacer"></li>
+  <li class="grid__spacer"></li>
+  <li class="grid__spacer"></li>
+</ul>
+
+<style>
+  @layer components {
+    .grid {
+      --row: clamp(9rem, 22vw, 16rem);
+      --gap: clamp(0.5rem, 1.2vw, 1rem);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--gap);
+      margin: 0;
+    }
+
+    .grid__cell {
+      flex-grow: var(--r);
+      flex-basis: calc(var(--r) * var(--row));
+      min-width: 0;
+    }
+
+    /* Absorb the leftover width on the final row so a single trailing
+       photograph is not blown up to full bleed. */
+    .grid__spacer {
+      flex-grow: 1.5;
+      flex-basis: calc(1.5 * var(--row));
+      height: 0;
+    }
+
+    .grid__btn {
+      display: block;
+      width: 100%;
+      padding: 0;
+      position: relative;
+      background: color-mix(in srgb, var(--ink) 4%, transparent);
+    }
+
+    .grid__img {
+      width: 100%;
+      height: auto;
+      transition:
+        opacity 500ms var(--ease),
+        filter var(--duration-ui) var(--ease);
+    }
+
+    /* Visible by default so a JS failure can never leave the page blank.
+       Photographs arrive as they decode rather than sliding in: the script
+       hides only those still in flight, then releases them on load. */
+    .grid__img[data-pending] {
+      opacity: 0;
+    }
+
+    .grid__btn:hover .grid__img,
+    .grid__btn:focus-visible .grid__img {
+      filter: brightness(1.06);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .grid__img[data-pending] {
+        opacity: 1;
+      }
+      .grid__img {
+        transition: none;
+      }
+    }
+  }
+</style>
+
+<script>
+  // Fade each photograph in once it has actually decoded. Anything already in
+  // cache is left alone so it never blinks.
+  document.querySelectorAll<HTMLImageElement>('.grid__img').forEach((img) => {
+    if (img.complete) return;
+    img.setAttribute('data-pending', '');
+    const reveal = () => img.removeAttribute('data-pending');
+    img.addEventListener('load', reveal, { once: true });
+    img.addEventListener('error', reveal, { once: true });
+  });
+</script>

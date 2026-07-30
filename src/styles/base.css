@@ -1,0 +1,156 @@
+/**
+ * Layer order is declared once, here, so section spacing never ends up in a
+ * specificity fight with component spacing.
+ */
+@layer reset, type, layout, components, utilities;
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100svh;
+    background: var(--album-ground);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: var(--step-body);
+    font-weight: 400;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    transition: background-color var(--duration-ambient) var(--ease);
+  }
+
+  img,
+  picture,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--sodium);
+    outline-offset: 3px;
+  }
+
+  /* Keyboard users get a visible ring, pointer users do not. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+@layer type {
+  .display {
+    font-family: var(--font-display);
+    font-size: var(--step-display);
+    font-weight: 200;
+    font-stretch: 112%;
+    line-height: 0.95;
+    letter-spacing: var(--tracking-display);
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: var(--step-title);
+    font-weight: 250;
+    font-stretch: 108%;
+    line-height: 1.05;
+  }
+
+  .label {
+    font-family: var(--font-display);
+    font-size: var(--step-label);
+    font-weight: 500;
+    font-stretch: 100%;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /**
+   * Newsreader is allowed here and nowhere else. The rule across the site is
+   * that the serif never appears above 20px: grotesque carries every
+   * structural job, the serif only shows up where there is real reading.
+   */
+  .prose {
+    font-family: var(--font-prose);
+    font-size: var(--step-prose);
+    font-optical-sizing: auto;
+    font-weight: 300;
+    line-height: 1.68;
+    max-width: var(--measure);
+  }
+
+  .prose p + p {
+    margin-top: var(--space-6);
+  }
+}
+
+@layer layout {
+  .page {
+    width: 100%;
+    max-width: var(--page-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .stack-8 > * + * {
+    margin-top: var(--space-8);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: var(--space-4);
+    top: var(--space-4);
+    z-index: 100;
+    padding: var(--space-2) var(--space-4);
+    background: var(--ink);
+    color: var(--ground);
+    transform: translateY(-200%);
+  }
+
+  .skip-link:focus {
+    transform: none;
+  }
+}
+
+@layer utilities {
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

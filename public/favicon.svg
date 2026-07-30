@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#14100e"/>
+  <!-- low sun on a horizon, the one thing in nearly every frame -->
+  <circle cx="16" cy="19" r="6" fill="#c8873f"/>
+  <rect x="0" y="19" width="32" height="13" fill="#14100e"/>
+  <rect x="0" y="19" width="32" height="1" fill="#8a7f74"/>
+</svg>

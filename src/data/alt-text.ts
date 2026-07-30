@@ -1,0 +1,112 @@
+/**
+ * Alt text for every photograph, written by hand against the contact sheets.
+ *
+ * These describe what is in the frame for someone who cannot see it, so they
+ * lead with the subject and the light rather than with mood words. Keys are the
+ * stable ids emitted by scripts/prepare-photos.mjs, so renumbering the source
+ * files would break them loudly rather than silently mismatching.
+ */
+export const altText: Record<string, string> = {
+  // UK & Elsewhere
+  'uk-and-elsewhere-01': 'Sun sitting on the horizon over a wet beach, with walkers and birds reduced to silhouettes against a deep orange sky.',
+  'uk-and-elsewhere-02': 'The tower of a suspension bridge at sunset, seen along the footway through bare branches.',
+  'uk-and-elsewhere-03': 'A stone clock tower dissolving into thick fog, almost monochrome.',
+  'uk-and-elsewhere-04': 'A wide park in flat evening light, small figures playing sport under a long bank of cloud.',
+  'uk-and-elsewhere-05': 'Low sun burning between the trunks of two large bare trees on parkland.',
+  'uk-and-elsewhere-06': 'Rugby posts on an empty green pitch beneath a torn pink and orange sunset.',
+  'uk-and-elsewhere-07': 'A hillside town seen from above, a road winding between white buildings and terraced green.',
+  'uk-and-elsewhere-08': 'A bridge and its railing mirrored in still water at first light, one bird in the sky.',
+  'uk-and-elsewhere-09': 'Bare winter trees with the sun dropping low between their trunks.',
+  'uk-and-elsewhere-10': 'Two runners on a tree lined path in winter, bare branches closing overhead.',
+  'uk-and-elsewhere-11': 'A castle keep on its grass mound under thin streaked cloud.',
+  'uk-and-elsewhere-12': 'A full moon in a lilac sky above a small white pier hut and its railings.',
+  'uk-and-elsewhere-13': 'Coastline from directly above, white surf breaking against dark rock beside green fields.',
+  'uk-and-elsewhere-14': 'A dense stand of tall bare trees with the sun sitting on the horizon behind them.',
+  'uk-and-elsewhere-15': 'A yellow and grey commuter train waiting at a station platform under a blown out white sky.',
+  'uk-and-elsewhere-16': 'The London Eye rising into a pale hazy sky.',
+  'uk-and-elsewhere-17': 'Pedestrians silhouetted on a wet street, walking into low sun that throws their shadows back towards the camera.',
+  'uk-and-elsewhere-18': 'A city seen from above at sunset, sun flaring between the rooftops.',
+  'uk-and-elsewhere-19': 'Two cyclists crossing parkland at sunset, shadows stretched out behind them.',
+  'uk-and-elsewhere-20': 'A wet park path at dusk under bare trees, the sky still pale blue and orange.',
+  'uk-and-elsewhere-21': 'A single bare tree in a park against a soft overcast sky.',
+  'uk-and-elsewhere-22': 'A red dragon sculpture backlit by the sun, the light flaring around its wing.',
+
+  // Hong Kong
+  'hong-kong-01': 'A bare brown hillside ridge under a flat peach coloured sky.',
+  'hong-kong-02': 'Black and white view from inside a tram, passengers in silhouette against dense high rise blocks and traffic.',
+  'hong-kong-03': 'A hazy sea with a distant ferry and a headland, the sun a soft disc behind pale green air.',
+  'hong-kong-04': 'A night market stall stacked with red crates, lit red from within.',
+  'hong-kong-05': 'A man working with a long pole on a harbour promenade, cranes and boats across the water behind him.',
+  'hong-kong-06': 'A suspension bridge almost erased by fog, trees in silhouette in the foreground.',
+  'hong-kong-07': 'A narrow canyon of residential towers at sunset, warm orange sky burning in the gap between them.',
+  'hong-kong-08': 'A tall tower rising out of the dense Hong Kong skyline with mountains behind, colour drained to near grey.',
+  'hong-kong-09': 'The sun low over water between two headlands, rough grass in the foreground.',
+  'hong-kong-10': 'A passenger jet passing low overhead against clear blue sky.',
+  'hong-kong-11': 'Sea and sky inverted so the water hangs above the horizon, in pale pink.',
+  'hong-kong-12': 'Long exposure of a pedestrian crossing, walkers blurred into streaks over yellow stripes.',
+  'hong-kong-13': 'A pale hazy sea with one small boat, the air grading from blue to pink.',
+  'hong-kong-14': 'Barges and cranes silhouetted on the water at sunset, gold reflected beneath them.',
+  'hong-kong-15': 'Looking straight up inside a lattice pylon, the steelwork closing into a symmetrical square.',
+  'hong-kong-16': 'Purple storm cloud over a beach at sunset, the sun reflected in the wet sand.',
+  'hong-kong-17': 'The interior of a local eatery under fluorescent light, staff working behind the counter.',
+  'hong-kong-18': 'The harbour at dusk with cranes and hills beyond, everything in olive and mauve haze.',
+  'hong-kong-19': 'The island skyline at dusk from across the harbour, pink sky above, a ferry crossing below.',
+  'hong-kong-20': 'Two tiny figures on rocks looking out over a vast pale cream sea, almost lost in the haze.',
+  'hong-kong-21': 'The sun setting behind a headland out at sea.',
+  'hong-kong-22': 'A cable stayed bridge in monochrome, hills and flat water beneath it.',
+
+  // Figures
+  'figures-01': 'A figure with a backpack walking through heavy fog, everything around them bleached out.',
+  'figures-02': 'Two people sitting on the edge of a large rock, looking out over distant hills.',
+  'figures-03': 'Close up of a glass on a table with low sun raking across the wood behind it.',
+  'figures-04': 'A busker playing violin at the end of a bright empty underpass, in black and white.',
+  'figures-05': 'Two people embracing, rimmed by hard backlight so they read as one dark shape.',
+  'figures-06': 'A child running across a park at sunset, others scattered in the distance.',
+  'figures-07': 'A paraglider hanging under a yellow canopy against clear blue sky.',
+  'figures-08': 'A mountain biker in full kit riding down a dusty trail towards the camera.',
+  'figures-09': 'Someone standing with arms folded beside a wall of bright purple hanging flowers.',
+  'figures-10': 'Hands on the strings and fretboard of an acoustic guitar, shallow focus.',
+  'figures-11': 'A single lit lamp on a plinth in the dark, bokeh lights floating behind it.',
+  'figures-12': 'A family walking away down a woodland path, small children in bright coats.',
+  'figures-13': 'Two mountain bikers climbing a narrow trail between trees.',
+  'figures-14': 'A person in a cap standing in complete silhouette against a hazy sun.',
+  'figures-15': 'Ornate lamps along a waterfront at night, their light doubled in the dark water.',
+  'figures-16': 'A figure in silhouette on a headland at dusk, the sea flat and grey behind them.',
+  'figures-17': 'Someone seen from behind in woodland, low sun flaring through their hair.',
+  'figures-18': 'A person in a mask and cap lit hard by pink and blue neon at night.',
+  'figures-19': 'Two people playing guitar side by side on a covered walkway.',
+  'figures-20': 'A walker with a backpack climbing a rocky ridge against clean blue sky.',
+
+  // Animals
+  'animals-01': 'A small black and white dog on a country lane, walkers further up the road behind it.',
+  'animals-02': 'A pigeon hunched into its own feathers, close enough to show every barb.',
+  'animals-03': 'A crow in complete silhouette on a bank of earth, bare twigs around it, pale sky behind.',
+  'animals-04': 'A small white dog trotting along a wet path, in black and white.',
+  'animals-05': 'Two birds facing each other on a metal railing above the water, both in silhouette.',
+  'animals-06': 'A duck swimming on water lit gold by low sun.',
+  'animals-07': 'Two birds on a rail with the sun setting directly between them, both reduced to black shapes.',
+  'animals-08': 'A cow turning its head towards the camera, the image almost bleached to white.',
+  'animals-09': 'A cat looking straight into the lens in low light, in black and white.',
+  'animals-10': 'A mallard on rippled water, the only strong colour its yellow bill.',
+  'animals-11': 'A tabby cat sitting alert, looking just past the camera.',
+  'animals-12': 'A cat photographed from behind, head tilted up into the light.',
+  'animals-13': 'A squirrel clinging to a branch high in a tree, backlit by a pale sky.',
+  'animals-14': 'An alpaca turning towards the camera over a fence, in black and white.',
+  'animals-15': 'A cat in profile, watching something out of frame.',
+  'animals-16': 'A robin standing on gravel beside a curved purple slide.',
+  'animals-17': 'A squirrel gripping the side of a tree trunk, tail curled up behind it.',
+  'animals-18': 'A swan on dark water with coots scattered around it.',
+  'animals-19': 'A small bird perched among tangled bare branches against a pale sky.',
+  'animals-20': 'A small white dog walking away down an empty path.',
+  'animals-21': 'A bird caught mid flight in motion blur, the background pulled into yellow streaks.',
+  'animals-22': 'A squirrel sitting up in dry grass, eating, in warm low light.',
+  'animals-23': 'A cat almost hidden behind a curtain beside a wall panel, in black and white.',
+  'animals-24': 'A goat leaning over a metal gate, one horn curving back, in black and white.',
+  'animals-25': 'A bird perched on a rock in silhouette against a flat pink dusk sky.',
+  'animals-26': 'A cat in profile against a plain background, in soft black and white.',
+};
+
+export const SITE_ALT = {
+  isaac:
+    'Isaac Ng crouching under neon light at night in London, wearing a cap and a face mask.',
+} as const;

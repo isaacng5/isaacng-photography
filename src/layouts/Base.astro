@@ -1,0 +1,60 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/newsreader/opsz.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Ambient from '../components/Ambient.astro';
+import { SITE } from '../data/albums';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Album black point. Falls back to the site ground. */
+  ground?: string;
+  /** Hide the footer rule on pages that end in a full bleed image. */
+  flush?: boolean;
+}
+
+const { title, description, ground, flush = false } = Astro.props;
+const fullTitle = title === SITE.name ? SITE.name : `${title} — ${SITE.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content={ground ?? '#14100e'} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body style={ground ? `--album-ground: ${ground}` : undefined}>
+    <a class="skip-link" href="#main">Skip to the photographs</a>
+    <Ambient />
+    <Nav />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer flush={flush} />
+
+    <style>
+      @layer layout {
+        /* Everything sits above the ambient layer, which is z-index 0. */
+        header,
+        main,
+        footer {
+          position: relative;
+          z-index: 1;
+        }
+      }
+    </style>
+  </body>
+</html>

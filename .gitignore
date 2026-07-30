@@ -1,0 +1,15 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# unprocessed camera scrape, 283MB. Working copies live in src/photos/
+originals/
+
+# macOS
+.DS_Store
+
+# logs
+npm-debug.log*

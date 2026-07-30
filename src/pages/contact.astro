@@ -1,0 +1,94 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/albums';
+---
+
+<Base
+  title="Contact"
+  description="Get in touch with Isaac Ng about a photograph, a print, or a walk with cameras."
+>
+  <section class="contact page">
+    <header>
+      <h1 class="title">Contact</h1>
+      <p class="contact__lede">
+        Instagram is the quickest way to reach me. Prints, questions about a particular
+        photograph, or somewhere worth walking with a camera, all welcome.
+      </p>
+    </header>
+
+    <a class="contact__card" href={SITE.instagramUrl} rel="me noopener" target="_blank">
+      <span class="label contact__where">Instagram</span>
+      <span class="contact__handle">@{SITE.instagram}</span>
+      <svg class="contact__arrow" width="26" height="10" viewBox="0 0 26 10" aria-hidden="true">
+        <path d="M0 5h23M20 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.2"></path>
+      </svg>
+    </a>
+  </section>
+</Base>
+
+<style>
+  @layer components {
+    .contact {
+      padding-block: clamp(var(--space-12), 10vh, var(--space-24)) 0;
+      max-width: 54rem;
+    }
+
+    .contact__lede {
+      max-width: 44ch;
+      margin-top: var(--space-6);
+      color: var(--muted);
+    }
+
+    .contact__card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: var(--space-2) var(--space-6);
+      margin-top: var(--space-16);
+      padding-block: var(--space-8);
+      border-top: 1px solid var(--edge);
+      border-bottom: 1px solid var(--edge);
+      transition: border-color var(--duration-ui) var(--ease);
+    }
+
+    .contact__card:hover {
+      border-color: var(--edge-strong);
+    }
+
+    .contact__where {
+      grid-column: 1;
+    }
+
+    .contact__handle {
+      grid-column: 1;
+      font-size: var(--step-title);
+      font-weight: 250;
+      font-stretch: 108%;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    .contact__arrow {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      color: var(--muted);
+      transition:
+        transform var(--duration-ui) var(--ease),
+        color var(--duration-ui) var(--ease);
+    }
+
+    .contact__card:hover .contact__arrow {
+      transform: translateX(5px);
+      color: var(--ink);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .contact__arrow {
+        transition: none;
+      }
+      .contact__card:hover .contact__arrow {
+        transform: none;
+      }
+    }
+  }
+</style>
