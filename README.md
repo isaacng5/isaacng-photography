@@ -1,6 +1,6 @@
 # Isaac Ng Photography
 
-Static photography portfolio. 90 photographs across four sets, built with Astro, deployed free on Cloudflare Pages.
+Static photography portfolio. 93 photographs across four sets, built with Astro, deployed free on Cloudflare Pages.
 
 Replaces a Wix site at `isaacng1.wixsite.com/my-site`.
 
@@ -19,7 +19,7 @@ Every colour on the site was sampled from the photographs rather than chosen. Th
 
 | Token | Value | Where it came from |
 | --- | --- | --- |
-| `--ground` | `#14100E` | warm shadow average across all 90 files |
+| `--ground` | `#14100E` | warm shadow average across all 93 files |
 | `--ink` | `#E8DED1` | highlight average, deliberately below pure white |
 | `--muted` | `#8A7F74` | mid tone |
 | `--sodium` | `#C8873F` | the low sun in nearly every frame. Hairlines only |
@@ -57,18 +57,20 @@ Everything is driven by IntersectionObserver or rAF rather than raw scroll handl
 
 ## Photographs
 
-Source files live in `originals/` (283MB, git ignored). `npm run photos` normalises them to 2560px long edge into `src/photos/` (61MB, committed), samples each photograph's light, and writes `src/data/photos.json`.
+Source files live in `originals/` (283MB, git ignored). `npm run photos` normalises them to 2560px long edge into `src/photos/` (63MB, committed), samples each photograph's light, and writes `src/data/photos.json`.
 
 Only rerun it if the originals change. The output is committed so Cloudflare never touches `originals/`.
 
 ```
-src/data/albums.ts     hand written: titles, grounds, covers, notes
-src/data/alt-text.ts   hand written: 90 alt strings, keyed by photo id
-src/data/photos.json   GENERATED: dimensions and sampled light
+src/data/albums.ts     hand written: titles, grounds, covers
+src/data/alt-text.ts   hand written: 93 alt strings, keyed by photo id
+src/data/photos.json   GENERATED: id, source hash, dimensions, sampled light
 src/data/photos.ts     joins the three and wires Astro's image pipeline
 ```
 
-Adding or removing a photograph means rerunning `npm run photos` and adding its alt string. The build fails loudly if an alt string is missing, rather than shipping an unlabelled image.
+Ids are pinned to the source file, not to sort position. `prepare-photos` reuses any id it has already issued and appends new work at the end of its album, so adding a photograph can never renumber the others and silently attach every alt string to the wrong picture.
+
+To add photographs: drop them in `originals/<folder>/`, run `npm run photos`, and write an alt string for each id it prints as NEW. The build fails loudly if one is missing rather than shipping an unlabelled image.
 
 ## Deploying
 
@@ -82,10 +84,20 @@ Every push to `main` redeploys. Pull requests get preview URLs.
 
 ## Known state
 
-- 45 of the 90 files were already capped at 2560px by Wix on upload, and all EXIF was stripped. If the original Nikon Z6ii files still exist, re exporting them is a drop in replacement.
+- 45 of the 93 files were already capped at 2560px by Wix on upload, and all EXIF was stripped. If the original Nikon Z6ii files still exist, re exporting them is a drop in replacement.
 - Contact is Instagram only. A form needs a backend, which means a Worker plus DNS once there is a custom domain.
 - No custom domain yet.
 
 ## Tests
 
-`node verify.mjs` against a running preview checks text contrast at AA, that no text out shines the album's own highlights, lightbox keyboard navigation and focus restoration, reduced motion compliance, and that every image carries explicit dimensions so CLS stays at zero.
+Needs Playwright, which is deliberately not a dependency here so that Cloudflare's build never downloads a browser:
+
+```bash
+npm i --no-save playwright && npx playwright install chromium
+npm run preview          # in one terminal
+node verify.mjs          # in another
+```
+
+Checks text contrast at AA on every rendered text node, that no text out shines the album's own highlights, lightbox keyboard navigation and focus restoration, reduced motion compliance, and that every image carries explicit dimensions so CLS stays at zero. Counts are derived from the manifest, never hardcoded.
+
+`audit.mjs` is separate and compares the live Wix site against this one by media id. It is what found three photographs the original scrape had missed.

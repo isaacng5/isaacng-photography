@@ -145,10 +145,17 @@ const pass = (label, ok, detail) => {
   );
   pass('arrow key advances', idx === 1, `slide index ${idx}`);
 
+  // Derived, never hardcoded: a count baked into the assertion would fail
+  // every time a photograph is added, which says nothing about the site.
+  const expected = manifest.filter((p) => p.album === 'animals').length;
   const announced = await page.evaluate(
     () => document.querySelector('[data-announce]').textContent
   );
-  pass('position announced to screen readers', /2 of 26/.test(announced), announced);
+  pass(
+    'position announced to screen readers',
+    announced === `Photograph 2 of ${expected}`,
+    announced
+  );
 
   await page.keyboard.press('Escape');
   await page.waitForTimeout(300);
