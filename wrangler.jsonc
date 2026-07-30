@@ -1,0 +1,17 @@
+{
+  // Static assets only. There is no server side code here, so there is no
+  // "main" entry: Workers just serves the built files out of dist/.
+  //
+  // Workers rather than Pages because a Worker can have a Git repository
+  // connected to it after it already exists, which a Pages project cannot.
+  "name": "isaacng-photography",
+  "compatibility_date": "2026-07-31",
+  "assets": {
+    "directory": "./dist",
+    // Astro emits /about.html and every internal href is /about, so normalise
+    // away trailing slashes rather than redirecting towards them.
+    "html_handling": "drop-trailing-slash",
+    // Serve the built 404.astro for unknown paths instead of a bare Workers error.
+    "not_found_handling": "404-page"
+  }
+}
